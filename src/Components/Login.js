@@ -11,27 +11,18 @@ function Login({
   setTableName,
 }) {
   const [exists, setExists] = useState(null);
-  const [userinput, setUserinput] = useState(false);
-  const [keyinput, setKeyinput] = useState(false);
+  const [userinput, setUserinput] = useState(true);
+  const [keyinput, setKeyinput] = useState(true);
   const [toggle, setToggle] = useState(false);
-  const [userinput2, setUserinput2] = useState(true);
-  const [keyinput2, setKeyinput2] = useState(true);
   const userLogin = async () => {
-    if (username.trim() === "") {
-      setUserinput(true);
+    if (username.length <= 2) {
+      setUserinput(false);
     }
-    if (password.trim() === "") {
-      setKeyinput(true);
-    }
-
-    if (username.length < 3 && username.length > 0) {
-      setUserinput2(false);
-    }
-    if (password.length < 9 && password.length > 0) {
-      setKeyinput2(false);
+    if (password.length <= 7) {
+      setKeyinput(false);
     }
 
-    if (userinput && keyinput && userinput2 && keyinput2) {
+    if (userinput && keyinput) {
       const newTableName = `${username}${password}`;
       setTableName(newTableName);
       const response = await axios.get(
@@ -68,10 +59,10 @@ function Login({
         onChange={(e) => handleUsernameChange(e.target.value)}
         style={{
           borderColor:
-            username.length < 3 && username.length > 0 ? "red" : null,
+            username.length >= 1 && username.length <= 2 ? "red" : null,
         }}
       />
-      <p className="msg">{userinput ? "Username cannot be empty" : null}</p>
+      <p className="msg">{!userinput ? "Username cannot be empty" : null}</p>
       <input
         type="password"
         placeholder="Password"
@@ -79,10 +70,10 @@ function Login({
         onChange={(e) => handlePasswordChange(e.target.value)}
         style={{
           borderColor:
-            password.length < 9 && password.length > 0 ? "red" : null,
+            password.length >= 1 && password.length <= 7 ? "red" : null,
         }}
       />
-      <p className="msg">{keyinput ? "Password cannot be empty" : null}</p>
+      <p className="msg">{!keyinput ? "Password cannot be empty" : null}</p>
       <button onClick={() => userLogin()}>Login</button>
       <p className="gate_switch" onClick={() => setGate(1)}>
         New user? click here!
